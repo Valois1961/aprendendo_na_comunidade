@@ -1,11 +1,10 @@
 package org.serratec.aprendendo_na_comunidade.controller;
-
 import java.util.List;
-import java.util.Optional;
-
-import org.serratec.aprendendo_na_comunidade.domain.Professor;
-import org.serratec.aprendendo_na_comunidade.repository.ProfessorRepository;
+import org.serratec.aprendendo_na_comunidade.dto.ProfessorDTO;
+import org.serratec.aprendendo_na_comunidade.service.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,37 +13,58 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-@RequestMapping("/professor")
+import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+@RestController @RequestMapping("/professores")
+@Tag(name = "Professores", description = "Endpoints responsáveis pelo gerenciamento de professores")
 public class ProfessorController {
+@Autowired
+private ProfessorService service;
 
-	@Autowired
-	private ProfessorRepository repository;
+@GetMapping
 
-	@GetMapping
-	public List<Professor> listar() {
-		return repository.findAll();
-	}
+@Operation(
+    summary = "Listar professores",
+    description = "Retorna todos os professores cadastrados"
+)
 
-	@GetMapping("/{id}")
-	public Optional<Professor> buscar(@PathVariable Long id) {
-		return repository.findById(id);
-	}
+public ResponseEntity<List<ProfessorDTO>>
+        listarTodos() {
 
-	@PostMapping
-	public Professor inserir(@RequestBody Professor professor) {
-		return repository.save(professor);
-	}
+    return ResponseEntity.ok(
+            service.listarTodos());
+}
 
-	@PutMapping("/{id}")
-	public Professor atualizar(@PathVariable Long id, @RequestBody Professor professor) {
-		professor.setId(id);
-		return repository.save(professor);
-	}
+@GetMapping("/{id}")
 
-	@DeleteMapping("/{id}")
-	public void deletar(@PathVariable Long id) {
-		repository.deleteById(id);
-	}
+@Operation(
+    summary = "Buscar professor por ID",
+    description = "Retorna um professor específico pelo ID"
+)
+
+public ResponseEntity<ProfessorDTO>
+        buscarPorId(@PathVariable Long id) {
+
+    return ResponseEntity.ok(
+            service.buscarPorId(id));
+}
+
+@PostMapping
+
+@Operation(
+    summary = "Cadastrar professor",
+    description = "Cadastra um novo professor no sistema"
+)
+
+public ResponseEntity<ProfessorDTO>
+        inserir(
+        @Valid
+        @RequestBody
+        ProfessorDTO dto) {
+
+    return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(service.inserir(dto));
+}
 }

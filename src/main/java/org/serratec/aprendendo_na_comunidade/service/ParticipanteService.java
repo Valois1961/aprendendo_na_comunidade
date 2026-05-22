@@ -44,4 +44,59 @@ public class ParticipanteService {
 
         return dtos;
     }
+
+    public ParticipanteDTO buscarPorId(Long id) {
+
+        Participante participante =
+                repository.findById(id).orElseThrow();
+
+        ParticipanteDTO dto = new ParticipanteDTO();
+
+        dto.setId(participante.getId());
+        dto.setNome(participante.getNome());
+        dto.setEmail(participante.getEmail());
+
+        return dto;
+    }
+
+    public ParticipanteDTO inserir(
+            Participante participante) {
+
+        participante = repository.save(participante);
+
+        ParticipanteDTO dto = new ParticipanteDTO();
+
+        dto.setId(participante.getId());
+        dto.setNome(participante.getNome());
+        dto.setEmail(participante.getEmail());
+
+        return dto;
+    }
+
+    public ParticipanteDTO atualizar(
+            Long id,
+            Participante participante) {
+
+        Participante participanteBanco =
+                repository.findById(id).orElseThrow();
+
+        participanteBanco.setNome(participante.getNome());
+        participanteBanco.setEmail(participante.getEmail());
+
+        participanteBanco =
+                repository.save(participanteBanco);
+
+        ParticipanteDTO dto = new ParticipanteDTO();
+
+        dto.setId(participanteBanco.getId());
+        dto.setNome(participanteBanco.getNome());
+        dto.setEmail(participanteBanco.getEmail());
+
+        return dto;
+    }
+
+    public void deletar(Long id) {
+
+        repository.deleteById(id);
+    }
 }

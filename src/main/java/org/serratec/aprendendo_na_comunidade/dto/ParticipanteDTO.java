@@ -1,44 +1,74 @@
 package org.serratec.aprendendo_na_comunidade.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+@Schema(description = "DTO de participantes")
 public class ParticipanteDTO {
 
-	private Long id;
+    @Schema(
+        description = "ID do participante",
+        example = "1"
+    )
+    private Long id;
 
-	private String nome;
+    @Schema(
+        description = "Nome do participante",
+        example = "João Silva"
+    )
 
-	private String email;
+    @NotBlank(message = "O nome é obrigatório")
+    @Size(min = 3, max = 100,
+          message = "O nome deve ter entre 3 e 100 caracteres")
+    private String nome;
 
-	private String perfilSocial;
+    @Schema(
+        description = "Email do participante",
+        example = "joao@email.com"
+    )
 
-	public Long getId() {
-		return id;
-	}
+    @NotBlank(message = "O email é obrigatório")
+    @Email(message = "Email inválido")
+    private String email;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Schema(
+        description = "Perfil social do participante",
+        example = "@joaosilva"
+    )
+    private String perfilSocial;
 
-	public String getNome() {
-		return nome;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public String getPerfilSocial() {
-		return perfilSocial;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setPerfilSocial(String perfilSocial) {
-		this.perfilSocial = perfilSocial;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPerfilSocial() {
+        return perfilSocial;
+    }
+
+    public void setPerfilSocial(String perfilSocial) {
+        this.perfilSocial = perfilSocial;
+    }
 }
